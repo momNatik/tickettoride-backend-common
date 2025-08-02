@@ -1,8 +1,10 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const uri = process.env.TTR_MONGODB_CONNECTION_STRING;
+const DB_CONNECTION_STRING = process.env.TTR_MONGODB_CONNECTION_STRING;
+const DB = "sample_mflix";
+const COLLECTION = "games";
 
-const client = new MongoClient(uri, {
+const client = new MongoClient(DB_CONNECTION_STRING, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -21,28 +23,33 @@ export async function CheckHealthAsync() {
   }
 
 export async function GetStatusAsync(gameId) {
+  return await ExecuteOnDB(async collection => await GetStatusOperationAsync(collection, gameId));
+}
+
+async function GetStatusOperationAsync(collection, gameId) {
+    const query = { id: gameId };
+
+    const options = {
+        // sort: { email: 1 },
+        // projection: { _id: 1,  name: 0, password: 0 },
+      };
+
+    const game = await collection.findOne(query, options);
+
+    // const isReady = Math.random() * 8 < 1;
+    const isReady = game?.isResourcesReady === true;
+
+    return isReady;
+}
+
+async function ExecuteOnDB(handlerAsync) {
     try {
         await client.connect();
 
-        const database = client.db("sample_mflix");
-        const collection = database.collection("users");
+        const database = client.db(DB);
+        const collection = database.collection(COLLECTION);
 
-        const query = { email: 'mark_addy@gameofthron.es' };
-
-        const options = {
-            sort: { email: 1 },
-            projection: { _id: 1,  name: 0, password: 0 },
-          };
-
-        const result = await collection.findOne(query, options);
-
-        const isReady = Math.random() * 8 < 1;
-
-        if (isReady) {
-          // initGame(gameId);
-        }
-
-        return isReady;
+        return await handlerAsync(collection);
     } finally {
         await client.close();
     }   

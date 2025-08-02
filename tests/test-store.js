@@ -1,3 +1,3 @@
-import { GetStatus } from "../store/game-resources.mjs";
+import { GetStatusAsync } from "../store/game-resources.mjs";
 
-GetStatus("abc");
+GetStatusAsync("abc");
