@@ -23,42 +23,32 @@ export async function CheckHealthAsync() {
   }
 
 export async function CreateAsync(game) {
-  return await ExecuteOnDB(async collection => await CreateOperationAsync(collection, game));
+  return await ExecuteOnDB(async collection => await InternalCreateAsync(collection, game));
 }
 
 export async function UpdateAsync(game) {
-  return await ExecuteOnDB(async collection => await UpdateOperationAsync(collection, game));
+  return await ExecuteOnDB(async collection => await InternalUpdateAsync(collection, game));
 }
 
-export async function GetStatusAsync(gameId) {
-  return await ExecuteOnDB(async collection => await GetStatusOperationAsync(collection, gameId));
+export async function GetAsync(gameId) {
+  return await ExecuteOnDB(async collection => await InternalGetAsync(collection, gameId));
 }
 
-async function CreateOperationAsync(collection, game) {
+async function InternalCreateAsync(collection, game) {
   return await collection.insertOne(game);
 }
 
-async function UpdateOperationAsync(collection, game) {
+async function InternalUpdateAsync(collection, game) {
   const query = { id: game.id };
   const update = { $set: game };
 
   return await collection.updateOne(query, update);
 }
 
-async function GetStatusOperationAsync(collection, gameId) {
+async function InternalGetAsync(collection, gameId) {
     const query = { id: gameId };
 
-    const options = {
-        // sort: { email: 1 },
-        // projection: { _id: 1,  name: 0, password: 0 },
-      };
-
-    const game = await collection.findOne(query, options);
-
-    // const isReady = Math.random() * 8 < 1;
-    const isReady = game?.isResourcesReady === true;
-
-    return isReady;
+    return await collection.findOne(query, {});
 }
 
 async function ExecuteOnDB(handlerAsync) {
