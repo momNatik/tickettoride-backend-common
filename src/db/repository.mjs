@@ -1,8 +1,8 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
 const DB_CONNECTION_STRING = process.env.TTR_MONGODB_CONNECTION_STRING;
-const DB = "sample_mflix";
-const COLLECTION = "games";
+const DB = process.env.DB_NAME;
+const COLLECTION = process.env.COLLECTION_GAME;
 
 const client = new MongoClient(DB_CONNECTION_STRING, {
   serverApi: {
@@ -22,31 +22,31 @@ export async function CheckHealthAsync() {
     }
   }
 
-export async function CreateAsync(game) {
-  return await ExecuteOnDB(async collection => await InternalCreateAsync(collection, game));
+export async function CreateAsync(document) {
+  return await ExecuteOnDB(async collection => await InternalCreateAsync(collection, document));
 }
 
-export async function UpdateAsync(game) {
-  return await ExecuteOnDB(async collection => await InternalUpdateAsync(collection, game));
+export async function UpdateAsync(document) {
+  return await ExecuteOnDB(async collection => await InternalUpdateAsync(collection, document));
 }
 
-export async function GetAsync(gameId) {
-  return await ExecuteOnDB(async collection => await InternalGetAsync(collection, gameId));
+export async function GetAsync(documentId) {
+  return await ExecuteOnDB(async collection => await InternalGetAsync(collection, documentId));
 }
 
-async function InternalCreateAsync(collection, game) {
-  return await collection.insertOne(game);
+async function InternalCreateAsync(collection, document) {
+  return await collection.insertOne(document);
 }
 
-async function InternalUpdateAsync(collection, game) {
-  const query = { id: game.id };
-  const update = { $set: game };
+async function InternalUpdateAsync(collection, document) {
+  const query = { id: document.id };
+  const update = { $set: document };
 
   return await collection.updateOne(query, update);
 }
 
-async function InternalGetAsync(collection, gameId) {
-    const query = { id: gameId };
+async function InternalGetAsync(collection, documentId) {
+    const query = { id: documentId };
 
     return await collection.findOne(query, {});
 }
