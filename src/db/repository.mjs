@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion } from "mongodb";
 
 const DB_CONNECTION_STRING = process.env.TTR_MONGODB_CONNECTION_STRING;
 const DB = process.env.DB_NAME;
@@ -9,29 +9,37 @@ const client = new MongoClient(DB_CONNECTION_STRING, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 export async function CheckHealthAsync() {
-    try {
-        await client.connect();
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        await client.close();
-    }
+  try {
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } finally {
+    await client.close();
   }
+}
 
 export async function CreateAsync(document) {
-  return await ExecuteOnDB(async collection => await InternalCreateAsync(collection, document));
+  return await ExecuteOnDB(
+    async (collection) => await InternalCreateAsync(collection, document)
+  );
 }
 
 export async function UpdateAsync(document) {
-  return await ExecuteOnDB(async collection => await InternalUpdateAsync(collection, document));
+  return await ExecuteOnDB(
+    async (collection) => await InternalUpdateAsync(collection, document)
+  );
 }
 
 export async function GetAsync(documentId) {
-  return await ExecuteOnDB(async collection => await InternalGetAsync(collection, documentId));
+  return await ExecuteOnDB(
+    async (collection) => await InternalGetAsync(collection, documentId)
+  );
 }
 
 async function InternalCreateAsync(collection, document) {
@@ -46,20 +54,20 @@ async function InternalUpdateAsync(collection, document) {
 }
 
 async function InternalGetAsync(collection, documentId) {
-    const query = { id: documentId };
+  const query = { id: documentId };
 
-    return await collection.findOne(query, {});
+  return await collection.findOne(query, {});
 }
 
 async function ExecuteOnDB(handlerAsync) {
-    try {
-        await client.connect();
+  try {
+    await client.connect();
 
-        const database = client.db(DB);
-        const collection = database.collection(COLLECTION);
+    const database = client.db(DB);
+    const collection = database.collection(COLLECTION);
 
-        return await handlerAsync(collection);
-    } finally {
-        await client.close();
-    }   
+    return await handlerAsync(collection);
+  } finally {
+    await client.close();
+  }
 }
