@@ -10,6 +10,8 @@ export async function SaveFileAsync(key, body) {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
     Body: body,
+    ContentType: "image/png",
+    ContentLength: body.length
   });
 
   return await ExecuteCommandAsync(command);
@@ -59,6 +61,7 @@ export async function DeleteFileAsync(key) {
 
 function CreateS3Client() {
   return new S3Client({
+    requestStreamBufferSize: 32 * 1024,
     region: process.env.AWS_REGION,
     credentials: {
       accessKeyId: process.env.AWS_ACCESSKEYID,
