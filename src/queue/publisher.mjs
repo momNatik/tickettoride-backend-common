@@ -9,27 +9,36 @@ export async function OpenChannelAsync(options) {
   };
 
   const connection = await amqp.connect(process.env.RABBIT_MQ_URL, opt);
-  const channel = await connection.createChannel();
+  const channel = await connection.createConfirmChannel();
 
-  await channel.assertExchange(
-    options.exchangeName,
-    process.env.EXCHANGE_TYPE,
-    {
-      durable: false,
-    }
-  );
+  const channelOptions = {
+    durable: false,
+  };
+
+  await channel.assertQueue(queueName, channelOptions);
 
   return {
     channel: channel,
-    exchangeName: options.exchangeName,
     queueName: options.queueName,
   };
 }
 
 export async function SendMessageToQueue(channelInfo, message) {
-  await channelInfo.channel.publish(
-    channelInfo.exchangeName,
+  const options = {
+    persistent: true,
+  };
+
+  const buffer = Buffer.from(JSON.stringify(message));
+  channelInfo.channel.sendToQueue(
     channelInfo.queueName,
-    Buffer.from(JSON.stringify(message))
+    buffer,
+    options,
+    function (err, ok) {
+      const acknowledgeStatus = err !== null ? "nack" : "ack";
+      Log(uniqueId, acknowledgeStatus);
+    }
   );
+
+  await channelInfo.channel.waitForConfirms();
+  console.log(`Message processed`);
 }

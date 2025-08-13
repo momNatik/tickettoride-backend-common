@@ -11,24 +11,11 @@ export async function ConnectToQueueAsync(options, handler) {
   const connection = await amqp.connect(process.env.RABBIT_MQ_URL, opt);
   const channel = await connection.createChannel();
 
-  await channel.assertExchange(
-    options.exchangeName,
-    process.env.EXCHANGE_TYPE,
-    {
-      durable: false,
-    }
-  );
-
   const queue = await channel.assertQueue(options.queueName, {
     exclusive: true,
   });
 
   console.log("Waiting for messages....");
-
-  // binding the queue
-  const binding_key = "";
-  channel.bindQueue(queue.queue, options.exchangeName, binding_key);
-
   console.log("consuming messages from queue: ", queue.queue);
 
   channel.consume(queue.queue, async (msg) => {
