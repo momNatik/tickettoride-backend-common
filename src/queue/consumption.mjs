@@ -1,6 +1,6 @@
 import amqp from "amqplib";
 
-export async function ConnectToQueue(options, handler) {
+export async function ConnectToQueueAsync(options, handler) {
   const opt = {
     credentials: amqp.credentials.plain(
       process.env.RABBIT_MQ_USER,

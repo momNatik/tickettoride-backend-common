@@ -30,6 +30,6 @@ export async function SendMessageToQueue(channelInfo, message) {
   await channelInfo.channel.publish(
     channelInfo.exchangeName,
     channelInfo.queueName,
-    Buffer.from(message)
+    Buffer.from(JSON.stringify(message))
   );
 }
