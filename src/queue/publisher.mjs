@@ -15,7 +15,7 @@ export async function OpenChannelAsync(options) {
     durable: false,
   };
 
-  await channel.assertQueue(queueName, channelOptions);
+  await channel.assertQueue(options.queueName, channelOptions);
 
   return {
     channel: channel,
