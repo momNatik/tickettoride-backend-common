@@ -18,10 +18,7 @@ export async function SendMessageToQueue(channel, queueName, message) {
   const buffer = Buffer.from(JSON.stringify(message));
   
   channel.sendToQueue(queueName, buffer, options, function (err, ok) {
-    const acknowledgeStatus = err !== null ? "nack" : "ack";
-    Log(uniqueId, acknowledgeStatus);
   });
 
   await channel.waitForConfirms();
-  console.log(`Message processed`);
 }
