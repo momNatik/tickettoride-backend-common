@@ -1,22 +1,11 @@
-import amqp from "amqplib";
-
-export async function ConnectToQueueAsync(options, handler) {
-  const opt = {
-    credentials: amqp.credentials.plain(
-      process.env.RABBIT_MQ_USER,
-      process.env.RABBIT_MQ_PW
-    ),
-  };
-
-  const connection = await amqp.connect(process.env.RABBIT_MQ_URL, opt);
+export async function ConnectToQueueAsync(connection, queueName, handler) {
   const channel = await connection.createChannel();
 
-  const queue = await channel.assertQueue(options.queueName, {
+  const queue = await channel.assertQueue(queueName, {
     exclusive: true,
   });
 
-  console.log("Waiting for messages....");
-  console.log("consuming messages from queue: ", queue.queue);
+  console.log("Consuming messages from queue: ", queue.queue);
 
   channel.consume(queue.queue, async (msg) => {
     if (msg.content) {
