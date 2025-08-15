@@ -2,7 +2,8 @@ export async function ConnectToQueueAsync(connection, queueName, handler) {
   const channel = await connection.createChannel();
 
   const queue = await channel.assertQueue(queueName, {
-    exclusive: true,
+    exclusive: false,
+    durable: false,
   });
 
   console.log("Consuming messages from queue: ", queue.queue);
