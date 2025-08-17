@@ -47,14 +47,14 @@ async function InternalCreateAsync(collection, document) {
 }
 
 async function InternalUpdateAsync(collection, document) {
-  const query = { id: document.id };
+  const query = { _id: document._id };
   const update = { $set: document };
 
   return await collection.updateOne(query, update);
 }
 
 async function InternalGetAsync(collection, documentId) {
-  const query = { id: documentId };
+  const query = { _id: documentId };
 
   return await collection.findOne(query, {});
 }
