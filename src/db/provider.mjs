@@ -8,5 +8,5 @@ async function CreateGameAsync(game) {
 
 async function IsResourcesReadyAsync(gameId) {
     const game = await GetAsync(gameId);
-    return game?.isResourcesReady === true;
+    return game?.status === 1;
 }
