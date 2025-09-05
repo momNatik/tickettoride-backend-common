@@ -8,7 +8,7 @@ export async function ConnectToQueueAsync(connection, queueName, handler) {
 
   console.log("Consuming messages from queue: ", queue.queue);
 
-  channel.consume(queue.queue, async (msg) => {
+  await channel.consume(queue.queue, async (msg) => {
     if (msg.content) {
       const msgData = JSON.parse(msg.content);
 
