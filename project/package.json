@@ -4,7 +4,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "node --watch --env-file=../../.env tests/test-store.js"
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --env-file=../../.env ./dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
     "mongodb": "^6.18.0"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.7",
     "@types/mongodb": "^4.0.6",
     "@types/node": "^24.3.1"
   }

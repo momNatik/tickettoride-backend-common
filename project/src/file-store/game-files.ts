@@ -3,9 +3,12 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
+  type GetObjectCommandOutput,
+  type DeleteObjectCommandOutput,
+  type PutObjectCommandOutput,
 } from "@aws-sdk/client-s3";
 
-export async function SaveFileAsync(key, body) {
+export async function SaveFileAsync(key, body): Promise<PutObjectCommandOutput> {
   const command = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
@@ -15,7 +18,7 @@ export async function SaveFileAsync(key, body) {
   return await ExecuteCommandAsync(command);
 }
 
-export async function GetFileAsync(key) {
+export async function GetFileAsync(key): Promise<GetObjectCommandOutput> {
   const command = new GetObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
@@ -24,7 +27,7 @@ export async function GetFileAsync(key) {
   return await ExecuteCommandAsync(command);
 }
 
-export async function DeleteFileAsync(key) {
+export async function DeleteFileAsync(key): Promise<DeleteObjectCommandOutput> {
   const command = new DeleteObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,

@@ -1,4 +1,4 @@
-import { CreateAsync, GetAsync } from "./repository.mjs";
+import { CreateAsync, GetAsync } from "./repository.js";
 
 export default { CreateGameAsync, IsResourcesReadyAsync }
 

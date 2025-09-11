@@ -1,7 +1,7 @@
 import AMQP from "amqplib";
 
-import { ConnectToQueueAsync } from "./consumption.mjs";
-import { CreateChannelAsync, SendMessageToQueue } from "./publisher.mjs";
+import { ConnectToQueueAsync } from "./consumption.js";
+import { CreateChannelAsync, SendMessageToQueue } from "./publisher.js";
 
 export default {
   ConnectToQueueAsync,

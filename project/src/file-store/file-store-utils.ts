@@ -1,4 +1,4 @@
-import { GetFileAsync } from "./game-files.mjs";
+import { GetFileAsync } from "./game-files.js";
 
 export function GetFileStoreKey(resourseType, ...ids) {
   const prefix = GetFileStoreKeyPrefix(ids);
