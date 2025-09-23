@@ -1,22 +1,14 @@
 {
   "name": "tickettoride-backend-common",
-  "type": "module",
   "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch --env-file=../../.env ./dist/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "type": "module",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.864.0",
     "amqplib": "^0.10.8",
     "mongodb": "^6.18.0"
   },
   "devDependencies": {
+    "typescript": "^5.6.2",
     "@types/amqplib": "^0.10.7",
     "@types/mongodb": "^4.0.6",
     "@types/node": "^24.3.1"
