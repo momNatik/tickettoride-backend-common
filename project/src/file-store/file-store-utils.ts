@@ -13,7 +13,7 @@ function GetFileStoreKeyPrefix(...ids) {
 
 function GetResourceName(type) {
   const resourceNames = {
-    background: "map_background.png",
+    landscape: "map_landscape.png",
     topology: "map_topology.svg",
     avatar: "player_avatar.jpg",
   };
