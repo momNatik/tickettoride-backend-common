@@ -8,11 +8,12 @@ import {
   type PutObjectCommandOutput,
 } from "@aws-sdk/client-s3";
 
-export async function SaveFileAsync(key, body): Promise<PutObjectCommandOutput> {
+export async function SaveFileAsync(key, body, contentType): Promise<PutObjectCommandOutput> {
   const command = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: key,
-    Body: body
+    Body: body,
+    ContentType: contentType
   });
 
   return await ExecuteCommandAsync(command);
